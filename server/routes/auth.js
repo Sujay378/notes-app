@@ -2,7 +2,9 @@ const router = require('express').Router();
 
 const { register, login, forgotPassword, reset } = require('../controllers/auth');
 
-router.post('/register', register);
+router.post("/register", register, (req, res) => {
+  res.setHeader;
+});
 
 router.post('/login', login);
 

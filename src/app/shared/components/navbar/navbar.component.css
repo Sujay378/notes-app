@@ -1,0 +1,17 @@
+.main-navbar {
+  justify-content: space-between;
+  height: fit-content;
+}
+
+.left-header {
+  display: flex;
+  align-items: center;
+}
+
+.app-title {
+  margin: 0;
+}
+
+.right-header {
+  display: flex;
+}
