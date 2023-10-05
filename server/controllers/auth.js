@@ -71,10 +71,6 @@ const login = async (req, res, next) => {
       }
     );
 
-    const newToken = new AuthToken({
-      user: existingUser._id,
-      token: hashedToken,
-    });
     await newToken.save();
 
     res.setHeader("Authorize", jsonToken);
