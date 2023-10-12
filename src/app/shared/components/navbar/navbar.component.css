@@ -1,6 +1,7 @@
 .main-navbar {
   justify-content: space-between;
   height: fit-content;
+  position: relative;
 }
 
 .left-header {

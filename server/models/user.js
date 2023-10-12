@@ -1,5 +1,4 @@
-const bcrypt = require('bcrypt');
-const Mongoose = require('mongoose');
+const Mongoose = require("mongoose");
 const Schema = Mongoose.Schema;
 
 const userSchema = new Schema({
@@ -17,4 +16,4 @@ const userSchema = new Schema({
   },
 });
 
-module.exports = Mongoose.model('User', userSchema);
+module.exports = Mongoose.model("User", userSchema);

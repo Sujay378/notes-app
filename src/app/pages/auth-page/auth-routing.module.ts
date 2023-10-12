@@ -8,12 +8,12 @@ import { PasswordResetComponent } from './password-reset/password-reset.componen
 const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'forgot-password', component: EmailValidateComponent },
-  { path: 'reset-password', component: PasswordResetComponent }
+  { path: 'forgot', component: EmailValidateComponent },
+  { path: 'reset', component: PasswordResetComponent },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AuthRoutingModule { }
+export class AuthRoutingModule {}

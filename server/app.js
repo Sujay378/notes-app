@@ -1,23 +1,29 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-require("dotenv").config();
 
-const corsClient = require("./cors");
+const cors = require("./cors");
 const { connectDB } = require("./db.js");
+const { initiateIO } = require("./socket");
+
+const app = express();
+
+const { getEnvPath } = require("./helpers/path");
+require("dotenv").config({ path: getEnvPath() });
 
 const authRoutes = require("./routes/auth");
 const noteRoutes = require("./routes/note");
-
-const app = express();
+const e2eRoutes = require("./routes/encryption");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use(corsClient);
+app.use(cors.corsClient);
 
-app.use("/auth", authRoutes);
+app.use("/api/encryption", e2eRoutes);
 
-app.use("/note", noteRoutes);
+app.use("/api/auth", authRoutes);
+
+app.use("/api/note", noteRoutes);
 
 app.use((err, req, res, next) => {
   if (!err) {
@@ -31,7 +37,8 @@ app.use((err, req, res, next) => {
 });
 
 connectDB((client) => {
-  app.listen(process.env.NODE_PORT, () =>
+  const server = app.listen(process.env.NODE_PORT, () =>
     console.log(`Server listening on http://localhost${process.env.NODE_PORT}`)
   );
+  initiateIO(server);
 });
