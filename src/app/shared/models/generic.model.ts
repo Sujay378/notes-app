@@ -5,6 +5,7 @@ export interface User {
 }
 
 export interface Note {
+  noteId: string;
   title: string;
   description: string;
 }

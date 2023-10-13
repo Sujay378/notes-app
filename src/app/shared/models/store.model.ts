@@ -3,10 +3,16 @@ import { Note } from './generic.model';
 export interface AppState {
   global: GlobalState;
   user: UserState;
+  note: NotesState;
 }
 
 export interface GlobalState {
   appProcessing: boolean;
+  alertData: {
+    visible: boolean;
+    type: string;
+    message: string;
+  };
 }
 
 export interface UserState {

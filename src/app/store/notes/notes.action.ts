@@ -21,6 +21,16 @@ export const removeGuestNote = createAction(
   props<{ payload: Note }>()
 );
 
+export const updateUserNote = createAction(
+  '[NOTES] update user note',
+  props<{ payload: Note }>()
+);
+
+export const updateGuestNote = createAction(
+  '[NOTES] update guest note',
+  props<{ payload: Note }>()
+);
+
 export const clearGuestNotes = createAction('[NOTES] clear guest notes');
 
 export const mergeGuestNotes = createAction('[NOTES] merge guest notes');

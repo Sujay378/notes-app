@@ -1,0 +1,47 @@
+.alert-backdrop {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(21, 21, 21, 0.5);
+    z-index: 100;
+}
+
+.alert-box {
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30%;
+    padding: 10px;
+    border-radius: 8px;
+    z-index: 200;
+}
+
+.alert-text {
+    font-size: 14px;
+    color: black;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.hidden {
+    display: none;
+}
+
+.alert-default {
+    background-color: white;
+    border: 3px solid black;
+}
+
+.alert-success {
+    background-color: lightgreen;
+    border: 3px solid green;
+}
+
+.alert-error {
+    background-color: rgb(245, 188, 188);
+    border: 3px solid rgb(252, 70, 70);
+}

@@ -7,7 +7,10 @@ import {
   mergeGuestNotes,
   removeGuestNote,
   clearGuestNotes,
+  updateUserNote,
+  updateGuestNote,
 } from './notes.action';
+import { Note } from 'src/app/shared/models/generic.model';
 
 const initialState: NotesState = {
   userNotes: [],
@@ -17,18 +20,24 @@ const initialState: NotesState = {
 export const notesReducer = createReducer(
   initialState,
   on(addGuestNote, (state, action) => {
-    return { ...state, guestNotes: [...state.guestNotes, action.payload] };
+    const newNote: Note = {
+      ...action.payload,
+      noteId: state.guestNotes.length + ''
+    };
+    return { ...state, guestNotes: [...state.guestNotes, newNote] };
   }),
   on(addUserNote, (state, action) => {
-    return { ...state, userNotes: [...state.userNotes, action.payload] };
+    const newNote: Note = {
+      ...action.payload,
+      noteId: state.guestNotes.length + ''
+    };
+    return { ...state, userNotes: [...state.userNotes, newNote] };
   }),
   on(removeGuestNote, (state, action) => {
     return {
       ...state,
       guestNotes: state.guestNotes.filter(
-        (note) =>
-          note.title !== action.payload.title &&
-          note.description !== action.payload.description
+        (note) => action.payload.noteId === note.noteId
       ),
     };
   }),
@@ -36,11 +45,21 @@ export const notesReducer = createReducer(
     return {
       ...state,
       userNotes: state.userNotes.filter(
-        (note) =>
-          note.title !== action.payload.title &&
-          note.description !== action.payload.description
+        (note) => action.payload.noteId === note.noteId
       ),
     };
+  }),
+  on(updateUserNote, (state, action) => {
+    return {
+      ...state,
+      userNotes: [...state.userNotes.filter(note => note.noteId !== action.payload.noteId), action.payload]
+    }
+  }),
+  on(updateGuestNote, (state, action) => {
+    return {
+      ...state,
+      guestNotes: [...state.guestNotes.filter(note => note.noteId !== action.payload.noteId), action.payload]
+    }
   }),
   on(clearGuestNotes, (state, action) => {
     return { ...state, guestNotes: [] };

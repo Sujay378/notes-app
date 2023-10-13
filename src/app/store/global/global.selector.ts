@@ -7,3 +7,8 @@ export const isAppProcessing = createSelector(
   globalSelector,
   (state: GlobalState) => state.appProcessing
 );
+
+export const isAltertVisible = createSelector(
+  globalSelector,
+  (state: GlobalState) => state.alertData
+);

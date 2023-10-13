@@ -9,6 +9,10 @@ export const environment = {
     },
     note: {
       fetchall: 'api/note/fetchall',
+      add: 'api/note/add/single',
+      merge: 'api/note/add/multiple',
+      remove: 'api/note/delete/single',
+      update: 'api/note/update/single',
     },
   },
 };
