@@ -8,11 +8,7 @@ export interface AppState {
 
 export interface GlobalState {
   appProcessing: boolean;
-  alertData: {
-    visible: boolean;
-    type: string;
-    message: string;
-  };
+  alertVisible: boolean;
 }
 
 export interface UserState {

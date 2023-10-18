@@ -1,27 +1,21 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { PasswordResetComponent } from './pages/auth-page/password-reset/password-reset.component';
 
 const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
+  { path: '', pathMatch: 'full', redirectTo: 'core' },
   {
-    path: 'auth',
-    loadChildren: () => import('./pages/auth-page/auth.module').then(module => module.AuthModule)
+    path: 'core',
+    loadChildren: () => import('./core/core.module').then((m) => m.CoreModule),
   },
-  {
-    path: 'dashboard',
-    loadChildren: () => import('./pages/dashboard-page/dashboard.module').then(module => module.DashboardModule)
-  },
-  {
-    path: 'note',
-    loadChildren: () => import('./pages/note-page/note.module').then(module => module.NoteModule)
-  },
+  { path: 'reset', component: PasswordResetComponent },
   { path: 'pagenotfound', component: PageNotFoundComponent },
-  { path: '**', redirectTo: 'pagenotfound' }
+  { path: '**', redirectTo: 'pagenotfound' },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

@@ -9,6 +9,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
+import { StandbyComponent } from './standby/standby.component';
+import { SharedModule } from 'src/app/shared/components/shared.module';
 
 @NgModule({
   declarations: [
@@ -16,6 +18,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     LoginComponent,
     EmailValidateComponent,
     PasswordResetComponent,
+    StandbyComponent,
   ],
   imports: [
     CommonModule,

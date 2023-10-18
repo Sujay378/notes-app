@@ -6,6 +6,8 @@ export const environment = {
     auth: {
       register: 'api/auth/register',
       login: 'api/auth/login',
+      forgot: 'api/auth/forgot/password',
+      reset: 'api/auth/reset//password',
     },
     note: {
       fetchall: 'api/note/fetchall',

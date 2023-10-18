@@ -1,1 +1,49 @@
-<p>create-note works!</p>
+<div class="note-wrapper">
+  <mat-card class="note-card">
+    <mat-tab-group [dynamicHeight]="true" #tabGroup>
+      <mat-tab
+        [label]="'Page ' + (i + 1)"
+        *ngFor="let control of pages; let i = index"
+      >
+        <div class="page-container">
+          <app-page *ngIf="control" [pageForm]="control"></app-page>
+
+          <div class="button-container">
+            <div class="page-action-button">
+              <button
+                mat-raised-button
+                color="primary"
+                class="me-2"
+                (click)="addEmptyPage()"
+              >
+                Add Page <mat-icon fontIcon="add"></mat-icon>
+              </button>
+              <button
+                mat-raised-button
+                color="accent"
+                class="me-2"
+                (click)="control.reset()"
+              >
+                Reset Page <mat-icon fontIcon="undo"></mat-icon>
+              </button>
+              <button
+                mat-raised-button
+                color="warn"
+                (click)="onDeleteOfPage(i)"
+                *ngIf="pages.length > 1"
+              >
+                Delete <mat-icon fontIcon="delete"></mat-icon>
+              </button>
+            </div>
+
+            <div class="page-submit-button">
+              <button mat-raised-button color="primary" (click)="submitNote()">
+                Submit <mat-icon>cloud_upload</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card>
+</div>

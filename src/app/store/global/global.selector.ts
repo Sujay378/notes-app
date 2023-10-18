@@ -10,5 +10,5 @@ export const isAppProcessing = createSelector(
 
 export const isAltertVisible = createSelector(
   globalSelector,
-  (state: GlobalState) => state.alertData
+  (state: GlobalState) => state.alertVisible
 );

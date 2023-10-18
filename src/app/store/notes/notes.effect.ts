@@ -1,9 +1,11 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import {
-  addUserNote,
+  initiateAddingUserNote,
+  finishAddingUserNote,
   clearGuestNotes,
   mergeGuestNotes,
-  removeUserNote,
+  initiateRemovingUserNote,
+  finishRemovingUserNote,
   updateUserNote,
 } from './notes.action';
 import {
@@ -21,7 +23,7 @@ import { Store } from '@ngrx/store';
 import { userDetails } from '../user/user.selector';
 import { Injectable } from '@angular/core';
 import { getGuestNotes } from './notes.selector';
-import { showAlert } from '../global/global.action';
+import { setAppProcessing, showAlert } from '../global/global.action';
 
 @Injectable({
   providedIn: 'root',
@@ -29,24 +31,37 @@ import { showAlert } from '../global/global.action';
 export class NotesEffect {
   addUserNoteToDB = createEffect(() =>
     this.actions$.pipe(
-      ofType(addUserNote),
-      withLatestFrom(this.store.select(userDetails)),
-      exhaustMap(([action, user]) => {
-        const payload = { ...action.payload, userId: user.userId };
+      ofType(initiateAddingUserNote),
+      tap(() => this.store.dispatch(setAppProcessing({ payload: true }))),
+      exhaustMap((action) => {
+        const payload = { ...action.payload };
         return this.http.httpPost('note', 'add', payload).pipe(
-          map((data) => {
+          switchMap((data: any) => {
             //show alert
-            return showAlert({
-              payload: { type: 'success', message: 'Note added successfully' },
-            });
+            return of(
+              finishAddingUserNote({
+                payload: {
+                  noteId: data.noteId,
+                  title: data.title,
+                  description: data.description,
+                },
+              }),
+              showAlert({
+                payload: {
+                  type: 'success',
+                  message: 'Note added successfully',
+                },
+              })
+            );
           }),
           catchError((err) => {
             //show alert
+            this.store.dispatch(setAppProcessing({ payload: false }));
             return of(
               showAlert({
                 payload: {
                   type: 'error',
-                  message: 'Something went wrong',
+                  message: 'Oops! something went wrong',
                 },
               })
             );
@@ -56,64 +71,86 @@ export class NotesEffect {
     )
   );
 
-  deleteUserNoteFromDB = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(removeUserNote),
-        withLatestFrom(this.store.select(userDetails)),
-        exhaustMap(([action, user]) => {
-          const payload = { userId: user.userId, ...action.payload };
-          return this.http.httpPost('note', 'remove', payload).pipe(
-            map((data) => {
-              //show alert
-              return data;
-            }),
-            catchError((err) => {
-              //show alert
-              return of({
-                type: err.type,
-                message: err.message,
-              });
-            })
-          );
-        })
-      ),
-    { dispatch: false }
+  deleteUserNoteFromDB = createEffect(() =>
+    this.actions$.pipe(
+      ofType(initiateRemovingUserNote),
+      tap(() => this.store.dispatch(setAppProcessing({ payload: true }))),
+      exhaustMap((action) => {
+        const payload = { ...action.payload };
+        return this.http.httpPost('note', 'remove', payload).pipe(
+          switchMap((data: any) => {
+            //show alert
+            return of(
+              finishRemovingUserNote({ payload: { ...data } }),
+              showAlert({
+                payload: {
+                  type: 'success',
+                  message: 'Note removed successfully',
+                },
+              })
+            );
+          }),
+          catchError((err) => {
+            //show alert
+            this.store.dispatch(setAppProcessing({ payload: false }));
+            return of(
+              showAlert({
+                payload: {
+                  type: 'Error',
+                  message: 'Oops! something went wrong',
+                },
+              })
+            );
+          })
+        );
+      })
+    )
   );
 
-  updateUserNoteFromDB = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(updateUserNote),
-        withLatestFrom(this.store.select(userDetails)),
-        exhaustMap(([action, user]) => {
-          const payload = { userId: user.userId, ...action.payload };
-          return this.http.httpPost('note', 'remove', payload).pipe(
-            map((data) => {
-              //show alert
-              return data;
-            }),
-            catchError((err) => {
-              //show alert
-              return of({
-                type: err.type,
-                message: err.message,
-              });
-            })
-          );
-        })
-      ),
-    { dispatch: false }
+  updateUserNoteFromDB = createEffect(() =>
+    this.actions$.pipe(
+      ofType(updateUserNote),
+      tap(() => this.store.dispatch(setAppProcessing({ payload: true }))),
+      withLatestFrom(this.store.select(userDetails)),
+      exhaustMap(([action, user]) => {
+        const payload = { userId: user.userId, ...action.payload };
+        return this.http.httpPost('note', 'remove', payload).pipe(
+          map((data) => {
+            //show alert
+            this.store.dispatch(setAppProcessing({ payload: false }));
+            return showAlert({
+              payload: {
+                type: 'success',
+                message: 'Note updated successfully',
+              },
+            });
+          }),
+          catchError((err) => {
+            //show alert
+            this.store.dispatch(setAppProcessing({ payload: false }));
+            return of(
+              showAlert({
+                payload: {
+                  type: 'error',
+                  message: 'Oops! something went wrong',
+                },
+              })
+            );
+          })
+        );
+      })
+    )
   );
 
-  updateGuestNotesToDB = createEffect(() =>
+  mergeGuestNotesToDB = createEffect(() =>
     this.actions$.pipe(
       ofType(mergeGuestNotes),
+      tap(() => this.store.dispatch(setAppProcessing({ payload: true }))),
       withLatestFrom(
         this.store.select(userDetails),
         this.store.select(getGuestNotes)
       ),
-      switchMap(([action, user, guestNotes]) => {
+      exhaustMap(([action, user, guestNotes]) => {
         const payload = {
           userId: user.userId,
           notes: guestNotes.map((note) => {
@@ -121,15 +158,28 @@ export class NotesEffect {
           }),
         };
         return this.http.httpPost('note', 'merge', payload).pipe(
-          map((data) => {
+          switchMap((data) => {
             //show alert
-            return clearGuestNotes();
+            return of(
+              showAlert({
+                payload: {
+                  type: 'success',
+                  message: 'Temporary notes saved successfully',
+                },
+              }),
+              clearGuestNotes()
+            );
           }),
           catchError((err) => {
-            return of({
-              type: err.type,
-              message: err.message,
-            });
+            this.store.dispatch(setAppProcessing({ payload: false }));
+            return of(
+              showAlert({
+                payload: {
+                  type: 'error',
+                  message: 'Oops! something went wrong',
+                },
+              })
+            );
           })
         );
       })

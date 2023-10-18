@@ -96,7 +96,8 @@ const login = async (req, res, next) => {
 };
 
 const forgotPassword = async (req, res, next) => {
-  const { email, origin } = req.body;
+  const { email } = req.body;
+  const origin = req.get("Origin");
   const socketId = req.get("Socket");
 
   if (!email || !origin) {
@@ -109,7 +110,7 @@ const forgotPassword = async (req, res, next) => {
     const user = await User.findOne({ email });
     if (!user) {
       const err = new Error("Invalid data provided");
-      err.type = "invalidData";
+      err.type = "invalidUser";
       throw err;
     }
 

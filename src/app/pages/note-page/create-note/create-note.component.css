@@ -1,0 +1,21 @@
+.note-wrapper {
+    margin: auto;
+    padding: 15px 0;
+}
+
+.note-card {
+    width: 80%;
+    margin: auto;
+    padding: 0 10px 15px 10px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.page-container {
+    padding: 10px 10px 0 10px;
+}
+
+.button-container {
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}

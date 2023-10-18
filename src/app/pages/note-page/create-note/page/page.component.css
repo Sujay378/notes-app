@@ -1,0 +1,29 @@
+.form-header {
+    padding: 0 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.page-title-field {
+    width: 30%;
+}
+
+mat-expansion-panel-header {
+    justify-content: space-between;
+    align-items: center;
+}
+
+.section-form {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+
+.section-header-field {
+    width: 40%;
+}
+
+.section-description-field {
+    width: 70%;
+}

@@ -1,10 +1,10 @@
-.alert-backdrop {
+.spinner-backdrop {
     position: fixed;
     left: 0;
     top: 0;
     height: 100vh;
     width: 100vw;
-    background-color: rgba(21, 21, 21, 0.5);
+    background-color: rgba(255, 255, 255, 0.8);
     z-index: 100;
 }
 
@@ -32,8 +32,8 @@
 }
 
 .alert-default {
-    background-color: white;
-    border: 3px solid black;
+    background-color: rgb(180, 180, 240);
+    border: 3px solid rgb(45, 45, 228);
 }
 
 .alert-success {
@@ -44,4 +44,23 @@
 .alert-error {
     background-color: rgb(245, 188, 188);
     border: 3px solid rgb(252, 70, 70);
+}
+
+.spinner-section {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 200;
+}
+
+mat-spinner {
+    margin: auto;
+}
+
+.spinner-text {
+    text-align: center;
+    font-size: 15px;
+    padding-top: 10px;
+    z-index: 200;
 }

@@ -3,9 +3,10 @@ import { HttpService } from './http.service';
 import { EncryptionService } from './encryption.service';
 import { Store } from '@ngrx/store';
 import { AppState } from '../models/store.model';
-import { loadUser } from 'src/app/store';
+import { loadUser, setAppProcessing, showAlert } from 'src/app/store';
 import { Observable, Subject } from 'rxjs';
 import { Router } from '@angular/router';
+import { ResetPassword } from '../models/payload.model';
 
 @Injectable({
   providedIn: 'root',
@@ -33,6 +34,7 @@ export class AuthService {
   }
 
   submit(service: string, route: string, data: Object) {
+    this.store.dispatch(setAppProcessing({ payload: true }));
     (<Observable<any>>this._http.httpPost(service, route, data)).subscribe({
       next: (res) => {
         if (route === 'login') {
@@ -49,13 +51,27 @@ export class AuthService {
             skipLocationChange: true,
             queryParamsHandling: 'preserve',
           });
+          this.store.dispatch(setAppProcessing({ payload: false }));
+          this.store.dispatch(
+            showAlert({ payload: { message: `Welcome Back ${res.name}` } })
+          );
         } else {
           if (res.success) {
             this._router.navigate(['auth/login'], {
               skipLocationChange: true,
               queryParamsHandling: 'preserve',
             });
+            this.store.dispatch(setAppProcessing({ payload: false }));
+            this.store.dispatch(
+              showAlert({
+                payload: {
+                  type: 'success',
+                  message: 'Registration successful! Please login',
+                },
+              })
+            );
           } else {
+            //go to error page
             console.log(res);
           }
         }
@@ -65,15 +81,66 @@ export class AuthService {
         if (err.type) {
           switch (err.type) {
             case 'invalidData':
-            case 'existingUser':
-              this.loginError.next(err.message);
+              this.store.dispatch(
+                showAlert({
+                  payload: {
+                    type: 'error',
+                    message: 'Username or Password was wrong',
+                  },
+                })
+              );
               break;
-
+            case 'existingUser':
+              this._router.navigate(['auth/login'], {
+                skipLocationChange: true,
+                queryParamsHandling: 'preserve',
+              });
+              this.store.dispatch(
+                showAlert({
+                  payload: {
+                    message: 'You already have an Account please login',
+                  },
+                })
+              );
+              break;
             default:
               console.error(err);
           }
         }
       },
     });
+  }
+
+  forgotPassword(data: { email: string }) {
+    const payload = data;
+    this.store.dispatch(setAppProcessing({ payload: true }));
+    this._http.httpPost('auth', 'forgot', payload).subscribe({
+      next: () => {
+        this._router.navigate([], {
+          skipLocationChange: true,
+          queryParamsHandling: 'preserve',
+        });
+      },
+      error: (err) => {
+        let route: string;
+        switch (err.type) {
+          case 'invalidUser':
+            route = 'auth/standby';
+            break;
+          default:
+            //route to error
+            route = 'error';
+        }
+
+        this._router.navigate([route], {
+          skipLocationChange: true,
+          queryParamsHandling: 'preserve',
+        });
+      },
+    });
+  }
+
+  resetPassword(payload: ResetPassword) {
+    console.log(payload);
   }
 }

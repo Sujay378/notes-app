@@ -1,0 +1,77 @@
+<div class="row" [formGroup]="pageForm">
+  <div class="form-header">
+    <h1 class="me-2">Start filling your page</h1>
+  </div>
+  <div class="page-container" #pageContainer>
+    <mat-form-field class="page-title-field" [hideRequiredMarker]="true">
+      <mat-label>Page title (Optional)</mat-label>
+      <input
+        type="text"
+        matInput
+        placeholder="Enter page title"
+        formControlName="pageTitle"
+      />
+    </mat-form-field>
+
+    <div class="page-section-container" formArrayName="sections">
+      <h2>Page sections</h2>
+
+      <mat-accordion class="example-headers-align">
+        <mat-expansion-panel
+          *ngFor="let control of sectionArray; let i = index"
+          [formGroupName]="i"
+          [expanded]="step === i + 1"
+          (opened)="setStep(i + 1)"
+          hideToggle
+        >
+          <mat-expansion-panel-header>
+            <mat-panel-title> Section {{ i + 1 }} </mat-panel-title>
+            <mat-panel-description>
+              Add your new section details here
+            </mat-panel-description>
+            <mat-icon>description</mat-icon>
+          </mat-expansion-panel-header>
+
+          <div class="section-form">
+            <mat-form-field class="section-header-field">
+              <mat-label>Section title (Optional)</mat-label>
+              <input
+                matInput
+                placeholder="Add section title"
+                formControlName="header"
+              />
+            </mat-form-field>
+
+            <mat-form-field
+              [hideRequiredMarker]="false"
+              class="section-description-field"
+            >
+              <mat-label>Section description</mat-label>
+              <textarea
+                matInput
+                placeholder="Add your description here"
+                formControlName="body"
+              ></textarea>
+            </mat-form-field>
+          </div>
+          <mat-action-row>
+            <button mat-button color="primary" (click)="addNewSection()">
+              Add another
+            </button>
+            <button mat-button color="accent" (click)="addNewSection()">
+              Reset
+            </button>
+            <button
+              mat-button
+              color="warn"
+              *ngIf="sectionArray.length > 1"
+              (click)="deleteSection(i)"
+            >
+              Delete
+            </button>
+          </mat-action-row>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </div>
+</div>

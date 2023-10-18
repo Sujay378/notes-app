@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AppState } from './shared/models/store.model';
 import { Store } from '@ngrx/store';
-import { isAltertVisible } from './store';
-import { AlertService } from './shared/services/alert.service';
+import { AppState } from './shared/models/store.model';
+import { setAppProcessing } from './store';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -14,19 +14,19 @@ export class AppComponent implements OnInit {
 
   constructor(
     private store: Store<AppState>,
-    private _alertService: AlertService
+    private _router: Router,
+    private _route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    this.store.select(isAltertVisible).subscribe((alertData) => {
-      if (alertData.visible) {
-        this._alertService.initiateAlert.emit({
-          type: alertData.type,
-          message: alertData.message,
-        });
-      } else {
-        this._alertService.closeAlert.emit();
-      }
-    });
+    //   .subscribe((url) => {
+    //   console.log(url);
+    //   if (url.length <= 1) {
+    //     this._router.navigate(['dashboard/main'], {
+    //       skipLocationChange: true,
+    //       queryParamsHandling: 'preserve',
+    //     });
+    //   }
+    // });
   }
 }

@@ -1,6 +1,6 @@
-const router = require('express').Router();
+const router = require("express").Router();
 
-const verifyLogin = require('../middlewares/verify');
+const verifyLogin = require("../middlewares/verify");
 const {
   fetchAll,
   fetchPage,
@@ -13,10 +13,10 @@ router.get("/fetch", verifyLogin, fetchAll);
 
 router.post("/fetch/:page/:count", verifyLogin, fetchPage);
 
-router.post("/add", verifyLogin, addNote);
+router.post("/add/single", verifyLogin, addNote);
 
-router.put('/edit/:id', verifyLogin, editNote);
+router.put("/edit", verifyLogin, editNote);
 
-router.delete('/delete/:id', verifyLogin, deleteNote);
+router.delete("/delete/:id", verifyLogin, deleteNote);
 
 module.exports = router;

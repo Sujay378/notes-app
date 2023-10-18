@@ -1,38 +1,69 @@
-<div class="register-card-container">
+<div class="register-card-container" [formGroup]="form">
   <mat-card class="register-form">
     <mat-card-header>
       <mat-card-title>Sign up</mat-card-title>
-      <mat-card-subtitle>Start</mat-card-subtitle>
+      <mat-card-subtitle>Come join us!</mat-card-subtitle>
     </mat-card-header>
 
     <mat-card-content>
       <mat-form-field style="width: 100%">
         <mat-label>Name</mat-label>
-        <input type="text" matInput />
+        <input type="text" matInput formControlName="name" />
+        <mat-error *ngIf="checkForError('name', 'required')"
+          >This field is required</mat-error
+        >
+        <mat-error *ngIf="checkForError('name', 'minlength')"
+          >Name length must be 5 or more</mat-error
+        >
+        <mat-error *ngIf="checkForError('name', 'notAllChar')"
+          >Name must contain only characters</mat-error
+        >
       </mat-form-field>
     </mat-card-content>
     <mat-card-content>
       <mat-form-field style="width: 100%">
         <mat-label>Email</mat-label>
-        <input type="email" matInput />
+        <input type="email" matInput formControlName="email" />
+        <mat-error *ngIf="checkForError('email', 'required')"
+          >This field is required</mat-error
+        >
+        <mat-error *ngIf="checkForError('email', 'email')"
+          >Please provide a valid email</mat-error
+        >
       </mat-form-field>
     </mat-card-content>
     <mat-card-content>
       <mat-form-field style="width: 100%">
         <mat-label>Password</mat-label>
-        <input type="password" matInput />
+        <input type="password" matInput formControlName="password" />
+        <mat-error *ngIf="checkForError('password', 'required')"
+          >This field is required</mat-error
+        >
+        <mat-error *ngIf="checkForError('password', 'pattern')"
+          >Password is not strong enough</mat-error
+        >
       </mat-form-field>
     </mat-card-content>
 
     <mat-card-actions>
-      <button mat-raised-button color="primary" class="note-button">
+      <button
+        mat-raised-button
+        color="primary"
+        class="note-button"
+        (click)="onClickSignUp()"
+      >
         Sign up
       </button>
     </mat-card-actions>
 
     <mat-card-actions class="mb-2 login-container">
       <p class="me-2">Already have an account?</p>
-      <button mat-raised-button color="accent" class="note-button">
+      <button
+        mat-raised-button
+        color="accent"
+        class="note-button"
+        (click)="onClickLogIn()"
+      >
         Log in
       </button>
     </mat-card-actions>

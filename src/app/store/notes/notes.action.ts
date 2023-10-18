@@ -1,12 +1,22 @@
 import { createAction, props } from '@ngrx/store';
 import { Note } from 'src/app/shared/models/generic.model';
 
-export const addUserNote = createAction(
+export const initiateAddingUserNote = createAction(
   '[NOTES] add user note',
   props<{ payload: Note }>()
 );
 
-export const removeUserNote = createAction(
+export const finishAddingUserNote = createAction(
+  '[NOTES] add user note',
+  props<{ payload: Note }>()
+);
+
+export const initiateRemovingUserNote = createAction(
+  '[NOTES] delete note',
+  props<{ payload: Note }>()
+);
+
+export const finishRemovingUserNote = createAction(
   '[NOTES] delete note',
   props<{ payload: Note }>()
 );

@@ -1,5 +1,5 @@
 .register-card-container {
-  width: 25vw;
+  width: 22vw;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -8,8 +8,17 @@
 
 .register-form {
   width: 100%;
+  padding: 10px;
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+mat-card-header {
+  padding-bottom: 10px;
+}
+
+mat-card-subtitle {
+  color: black;
 }
 
 .login-container {

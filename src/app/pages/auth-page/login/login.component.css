@@ -1,0 +1,49 @@
+.register-card-container {
+    width: 22vw;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.register-form {
+    width: 100%;
+    padding: 10px;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+mat-card-header {
+    padding-bottom: 10px;
+}
+
+.register-form-subtitle {
+    color: black;
+}
+
+.login-container {
+    display: flex;
+    align-items: center;
+}
+
+.forgot-link {
+    text-decoration: none;
+    color: blue;
+}
+
+.forgot-link:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.forgot-link:active {
+    color: purple;
+}
+
+.login-container p {
+    margin: 0
+}
+
+.note-button {
+    width: 100%;
+}

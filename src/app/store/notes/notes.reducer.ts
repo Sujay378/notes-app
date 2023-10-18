@@ -2,8 +2,10 @@ import { createReducer, on } from '@ngrx/store';
 import { NotesState } from 'src/app/shared/models/store.model';
 import {
   addGuestNote,
-  removeUserNote,
-  addUserNote,
+  initiateRemovingUserNote,
+  finishRemovingUserNote,
+  initiateAddingUserNote,
+  finishAddingUserNote,
   mergeGuestNotes,
   removeGuestNote,
   clearGuestNotes,
@@ -22,16 +24,16 @@ export const notesReducer = createReducer(
   on(addGuestNote, (state, action) => {
     const newNote: Note = {
       ...action.payload,
-      noteId: state.guestNotes.length + ''
+      noteId: state.guestNotes.length + '',
     };
     return { ...state, guestNotes: [...state.guestNotes, newNote] };
   }),
-  on(addUserNote, (state, action) => {
-    const newNote: Note = {
-      ...action.payload,
-      noteId: state.guestNotes.length + ''
+  on(initiateAddingUserNote, (state, action) => state),
+  on(finishAddingUserNote, (state, action) => {
+    return {
+      ...state,
+      userNotes: [...state.userNotes, action.payload],
     };
-    return { ...state, userNotes: [...state.userNotes, newNote] };
   }),
   on(removeGuestNote, (state, action) => {
     return {
@@ -41,25 +43,36 @@ export const notesReducer = createReducer(
       ),
     };
   }),
-  on(removeUserNote, (state, action) => {
+  on(initiateRemovingUserNote, (state, action) => state),
+  on(finishRemovingUserNote, (state, action) => {
     return {
       ...state,
       userNotes: state.userNotes.filter(
-        (note) => action.payload.noteId === note.noteId
+        (note) => action.payload.noteId !== note.noteId
       ),
     };
   }),
   on(updateUserNote, (state, action) => {
     return {
       ...state,
-      userNotes: [...state.userNotes.filter(note => note.noteId !== action.payload.noteId), action.payload]
-    }
+      userNotes: [
+        ...state.userNotes.filter(
+          (note) => note.noteId !== action.payload.noteId
+        ),
+        action.payload,
+      ],
+    };
   }),
   on(updateGuestNote, (state, action) => {
     return {
       ...state,
-      guestNotes: [...state.guestNotes.filter(note => note.noteId !== action.payload.noteId), action.payload]
-    }
+      guestNotes: [
+        ...state.guestNotes.filter(
+          (note) => note.noteId !== action.payload.noteId
+        ),
+        action.payload,
+      ],
+    };
   }),
   on(clearGuestNotes, (state, action) => {
     return { ...state, guestNotes: [] };

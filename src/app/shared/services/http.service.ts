@@ -50,6 +50,7 @@ export class HttpService {
       ...(ConfigService.get('encryption')
         ? { Encryption: ConfigService.get('encryption') }
         : {}),
+      Origin: window.location.origin,
     });
   }
 

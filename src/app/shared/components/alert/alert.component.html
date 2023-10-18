@@ -1,3 +1,13 @@
-<div [ngClass]="{'hidden': !showModal}" [class]="'alert-box '+ alertType">
-    <p class="alert-text">{{alertMessage}}</p>
+<div [ngClass]="{ hidden: !showModal }" [class]="'alert-box ' + alertType">
+  <p class="alert-text">{{ alertMessage }}</p>
 </div>
+<section *ngIf="isAppProccesing$ | async">
+  <div class="spinner-backdrop"></div>
+  <div class="spinner-section">
+    <mat-spinner color="primary"></mat-spinner>
+    <div class="spinner-text">
+      <p>Please wait...</p>
+      <p>We are processing your request</p>
+    </div>
+  </div>
+</section>

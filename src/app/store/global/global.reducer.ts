@@ -4,11 +4,7 @@ import { GlobalState } from 'src/app/shared/models/store.model';
 
 const initialState: GlobalState = {
   appProcessing: false,
-  alertData: {
-    visible: false,
-    type: '',
-    message: '',
-  },
+  alertVisible: false,
 };
 
 export const globalReducer = createReducer(
@@ -17,9 +13,9 @@ export const globalReducer = createReducer(
     return { ...state, appProcessing: action.payload };
   }),
   on(showAlert, (state, action) => {
-    return { ...state, alertData: { visible: true, ...action.payload } };
+    return { ...state, alertVisible: true };
   }),
   on(hideAlert, (state, action) => {
-    return { ...state, alertData: { visible: false, type: '', message: '' } };
+    return { ...state, alertVisible: false };
   })
 );

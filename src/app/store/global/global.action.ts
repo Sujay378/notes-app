@@ -13,7 +13,7 @@ export const setAppProcessing = createAction(
 
 export const showAlert = createAction(
   ActionTypes.showAlert,
-  props<{ payload: { type: string; message: string } }>()
+  props<{ payload: { type?: string; message: string } }>()
 );
 
 export const hideAlert = createAction(ActionTypes.hideAlert);
