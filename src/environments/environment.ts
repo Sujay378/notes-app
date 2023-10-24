@@ -11,6 +11,7 @@ export const environment = {
     },
     note: {
       fetchall: 'api/note/fetchall',
+      fetchUserNotes: 'api/note/userNotes',
       add: 'api/note/add/single',
       merge: 'api/note/add/multiple',
       remove: 'api/note/delete/single',

@@ -5,7 +5,17 @@ export interface User {
 }
 
 export interface Note {
-  noteId: string;
-  title: string;
-  description: string;
+  noteId?: string;
+  noteTitle: string;
+  pages: Page[];
+}
+
+interface Page {
+  pageTitle: string;
+  sections: Section[];
+}
+
+interface Section {
+  header: string;
+  body: string;
 }

@@ -1,5 +1,12 @@
-import { AbstractControl, FormControl, ValidationErrors } from '@angular/forms';
+import {
+  AbstractControl,
+  ValidationErrors,
+  AsyncValidatorFn,
+} from '@angular/forms';
 import { generateNewPassword } from '../types/form-types';
+import { map, switchMap, timer, catchError, Observable, of } from 'rxjs';
+import { inject } from '@angular/core';
+import { HttpService } from '../services/http.service';
 
 export const passwordEqualityValidator = (form: generateNewPassword) => {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -20,5 +27,21 @@ export const checkOnlyCharacters = () => {
       }
     }
     return error;
+  };
+};
+
+export const checkUniqueTitle = (): AsyncValidatorFn => {
+  const httpService = inject(HttpService);
+  return (control: AbstractControl): Observable<ValidationErrors | null> => {
+    return timer(500).pipe(
+      switchMap(() => {
+        return httpService
+          .httpPost('note', 'verify', { title: control.value })
+          .pipe(
+            map(() => null),
+            catchError(() => of({ notUnique: true }))
+          );
+      })
+    );
   };
 };

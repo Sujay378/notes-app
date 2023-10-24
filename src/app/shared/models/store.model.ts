@@ -21,6 +21,8 @@ export interface UserState {
 }
 
 export interface NotesState {
+  userNotesLoaded: boolean;
+  selectedNote: Note | null;
   userNotes: Note[];
   guestNotes: Note[];
 }

@@ -1,0 +1,27 @@
+.standby__container {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.standby__image-container {
+  width: 25%;
+  margin: auto;
+}
+
+.standby__image-container img {
+  display: inline-block;
+  max-width: 100%;
+  margin: auto;
+}
+
+.back-to-home-button {
+  width: 25%;
+  margin: auto;
+}

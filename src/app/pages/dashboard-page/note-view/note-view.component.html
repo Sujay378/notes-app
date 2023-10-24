@@ -1,1 +1,40 @@
-<p>note-view works!</p>
+<div *ngIf="!selectedDoc; else elseBlock" class="centered">
+  Select a document from the list to see.
+</div>
+
+<ng-template #elseBlock>
+  <div class="note-view__container">
+    <div class="note-view__doc-container">
+      <div class="doc-title" [textContent]="selectedDoc?.noteTitle"></div>
+      <div class="page-scroll-container">
+        <div *ngFor="let page of selectedDoc?.pages" class="page-layout">
+          <div
+            class="page-title mb-3"
+            *ngIf="page.pageTitle"
+            [textContent]="page.pageTitle"
+          ></div>
+          <div class="section mb-2" *ngFor="let section of page.sections">
+            <div
+              class="section-header"
+              *ngIf="section.header"
+              [textContent]="section.header + ':'"
+            ></div>
+            <div class="section-body" [textContent]="section.body"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="note-view__util-container">
+      <mat-card class="utility-card">
+        <div class="utils">
+          <button mat-icon-button>
+            <mat-icon fontIcon="edit"></mat-icon>
+          </button>
+          <button mat-icon-button>
+            <mat-icon fontIcon="delete"></mat-icon>
+          </button>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+</ng-template>

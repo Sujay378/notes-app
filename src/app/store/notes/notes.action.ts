@@ -1,12 +1,17 @@
-import { createAction, props } from '@ngrx/store';
+import { createAction, createSelector, props } from '@ngrx/store';
 import { Note } from 'src/app/shared/models/generic.model';
 
-export const initiateAddingUserNote = createAction(
+export const sendUserNoteToBackend = createAction(
   '[NOTES] add user note',
   props<{ payload: Note }>()
 );
 
-export const finishAddingUserNote = createAction(
+export const updateBackendUserNotes = createAction(
+  '[NOTES] update backend user notes',
+  props<{ payload: Note[] }>()
+);
+
+export const mergeUserNote = createAction(
   '[NOTES] add user note',
   props<{ payload: Note }>()
 );
@@ -44,3 +49,8 @@ export const updateGuestNote = createAction(
 export const clearGuestNotes = createAction('[NOTES] clear guest notes');
 
 export const mergeGuestNotes = createAction('[NOTES] merge guest notes');
+
+export const setSelectedNote = createAction(
+  '[NOTE] set current selected note',
+  props<{ payload: { index: number; guest: boolean } }>()
+);

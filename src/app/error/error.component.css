@@ -1,0 +1,27 @@
+.error__container {
+  width: 40%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  text-align: center;
+}
+
+.error__image-container {
+  width: 25%;
+}
+
+.error__image-container img {
+  max-width: 100%;
+  margin: auto;
+}
+
+.restart-button {
+  width: fit-content;
+  margin: auto;
+}

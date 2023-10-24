@@ -1,41 +1,35 @@
 import { createReducer, on } from '@ngrx/store';
 import { NotesState } from 'src/app/shared/models/store.model';
-import {
-  addGuestNote,
-  initiateRemovingUserNote,
-  finishRemovingUserNote,
-  initiateAddingUserNote,
-  finishAddingUserNote,
-  mergeGuestNotes,
-  removeGuestNote,
-  clearGuestNotes,
-  updateUserNote,
-  updateGuestNote,
-} from './notes.action';
+import * as noteActions from './notes.action';
 import { Note } from 'src/app/shared/models/generic.model';
 
 const initialState: NotesState = {
+  userNotesLoaded: false,
   userNotes: [],
   guestNotes: [],
+  selectedNote: null,
 };
 
 export const notesReducer = createReducer(
   initialState,
-  on(addGuestNote, (state, action) => {
+  on(noteActions.addGuestNote, (state, action) => {
     const newNote: Note = {
       ...action.payload,
       noteId: state.guestNotes.length + '',
     };
     return { ...state, guestNotes: [...state.guestNotes, newNote] };
   }),
-  on(initiateAddingUserNote, (state, action) => state),
-  on(finishAddingUserNote, (state, action) => {
+  on(noteActions.updateBackendUserNotes, (state, action) => {
+    return { ...state, userNotes: [...state.userNotes, ...action.payload] };
+  }),
+  on(noteActions.sendUserNoteToBackend, (state, action) => state),
+  on(noteActions.mergeUserNote, (state, action) => {
     return {
       ...state,
       userNotes: [...state.userNotes, action.payload],
     };
   }),
-  on(removeGuestNote, (state, action) => {
+  on(noteActions.removeGuestNote, (state, action) => {
     return {
       ...state,
       guestNotes: state.guestNotes.filter(
@@ -43,8 +37,8 @@ export const notesReducer = createReducer(
       ),
     };
   }),
-  on(initiateRemovingUserNote, (state, action) => state),
-  on(finishRemovingUserNote, (state, action) => {
+  on(noteActions.initiateRemovingUserNote, (state, action) => state),
+  on(noteActions.finishRemovingUserNote, (state, action) => {
     return {
       ...state,
       userNotes: state.userNotes.filter(
@@ -52,7 +46,7 @@ export const notesReducer = createReducer(
       ),
     };
   }),
-  on(updateUserNote, (state, action) => {
+  on(noteActions.updateUserNote, (state, action) => {
     return {
       ...state,
       userNotes: [
@@ -63,7 +57,7 @@ export const notesReducer = createReducer(
       ],
     };
   }),
-  on(updateGuestNote, (state, action) => {
+  on(noteActions.updateGuestNote, (state, action) => {
     return {
       ...state,
       guestNotes: [
@@ -74,10 +68,17 @@ export const notesReducer = createReducer(
       ],
     };
   }),
-  on(clearGuestNotes, (state, action) => {
+  on(noteActions.clearGuestNotes, (state, action) => {
     return { ...state, guestNotes: [] };
   }),
-  on(mergeGuestNotes, (state, action) => {
+  on(noteActions.mergeGuestNotes, (state, action) => {
     return { ...state, userNotes: [...state.userNotes, ...state.guestNotes] };
+  }),
+  on(noteActions.setSelectedNote, (state, action) => {
+    const { index, guest } = action.payload;
+    const selectedNote = guest
+      ? state.guestNotes[index]
+      : state.userNotes[index];
+    return { ...state, selectedNote };
   })
 );

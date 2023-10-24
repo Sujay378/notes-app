@@ -1,2 +1,8 @@
-<p>dashboard works!</p>
-<button class="btn btn-primary" (click)="openModal()">Click me</button>
+<div class="dashboard__container">
+  <div class="dashboard__list-container">
+    <app-note-list></app-note-list>
+  </div>
+  <div class="dashboard__view-container" style="position: relative">
+    <app-note-view></app-note-view>
+  </div>
+</div>

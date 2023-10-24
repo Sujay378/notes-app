@@ -4,12 +4,14 @@ import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { EmailValidateComponent } from './email-validate/email-validate.component';
 import { PasswordResetComponent } from './password-reset/password-reset.component';
+import { StandbyComponent } from './standby/standby.component';
 
 const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
   { path: 'forgot', component: EmailValidateComponent },
   { path: 'reset', component: PasswordResetComponent },
+  { path: 'standby', component: StandbyComponent },
 ];
 
 @NgModule({

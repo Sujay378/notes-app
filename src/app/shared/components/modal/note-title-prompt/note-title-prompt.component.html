@@ -1,0 +1,24 @@
+<mat-form-field>
+  <mat-label>Note Title</mat-label>
+  <input
+    matInput
+    type="text"
+    placeholder="eg. My Note"
+    [formControl]="titleControl"
+  />
+  <mat-error *ngIf="titleControl"></mat-error>
+</mat-form-field>
+<div class="button-container">
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="create()"
+    [textContent]="params?.primaryButtonText"
+  ></button>
+  <button
+    mat-stroked-button
+    color="primary"
+    (click)="cancel()"
+    [textContent]="params?.secondaryButtonText"
+  ></button>
+</div>

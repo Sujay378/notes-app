@@ -1,6 +1,7 @@
 .main-navbar {
+  align-items: center;
   justify-content: space-between;
-  height: fit-content;
+  height: 8%;
   position: relative;
 }
 

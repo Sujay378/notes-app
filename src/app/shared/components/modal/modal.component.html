@@ -1,0 +1,29 @@
+<div class="notes-custom-modal__container">
+  <div class="notes-custom-modal__backdrop"></div>
+  <div class="notes-custom-modal__prompt">
+    <div class="notes-custom-modal__prompt-header">
+      <span *ngIf="params.headerText" [textContent]="params.headerText"></span>
+      <button
+        class="close-icon"
+        *ngIf="params.showCloseIcon"
+        mat-icon-button
+        (click)="close()"
+      >
+        <mat-icon>cancel</mat-icon>
+      </button>
+    </div>
+    <div class="notes-custom-modal__prompt-body">
+      <div
+        class="notes-custom-modal__prompt-body-text"
+        *ngIf="params.bodyText"
+        [textContent]="params.bodyText"
+      ></div>
+      <ng-template [ngSwitch]="modalType">
+        <app-note-title-prompt
+          *ngSwitchCase="'note-title'"
+          [noteTitleParams]="params"
+        ></app-note-title-prompt>
+      </ng-template>
+    </div>
+  </div>
+</div>

@@ -3,6 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { CoreComponent } from './core.component';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../shared/components/shared.module';
+import { PageNotFoundComponent } from '../page-not-found/page-not-found.component';
+import { ErrorComponent } from '../error/error.component';
 
 const routes: Routes = [
   {
@@ -26,10 +28,19 @@ const routes: Routes = [
         (module) => module.NoteModule
       ),
   },
+  { path: 'pagenotfound', component: PageNotFoundComponent },
+  { path: 'error', component: ErrorComponent },
 ];
 
 @NgModule({
   declarations: [CoreComponent],
-  imports: [CommonModule, SharedModule, RouterModule.forChild(routes)],
+  imports: [
+    CommonModule,
+    SharedModule,
+    RouterModule.forRoot(routes, {
+      initialNavigation: 'disabled',
+    }),
+  ],
+  exports: [CoreComponent],
 })
 export class CoreModule {}

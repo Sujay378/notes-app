@@ -1,14 +1,7 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+import * as noteActions from './notes.action';
 import {
-  initiateAddingUserNote,
-  finishAddingUserNote,
-  clearGuestNotes,
-  mergeGuestNotes,
-  initiateRemovingUserNote,
-  finishRemovingUserNote,
-  updateUserNote,
-} from './notes.action';
-import {
+  Observable,
   catchError,
   exhaustMap,
   map,
@@ -18,12 +11,13 @@ import {
   withLatestFrom,
 } from 'rxjs';
 import { HttpService } from 'src/app/shared/services/http.service';
-import { AppState } from 'src/app/shared/models/store.model';
+import { AppState, NotesState } from 'src/app/shared/models/store.model';
 import { Store } from '@ngrx/store';
 import { userDetails } from '../user/user.selector';
 import { Injectable } from '@angular/core';
 import { getGuestNotes } from './notes.selector';
 import { setAppProcessing, showAlert } from '../global/global.action';
+import { Note } from 'src/app/shared/models/generic.model';
 
 @Injectable({
   providedIn: 'root',
@@ -31,19 +25,21 @@ import { setAppProcessing, showAlert } from '../global/global.action';
 export class NotesEffect {
   addUserNoteToDB = createEffect(() =>
     this.actions$.pipe(
-      ofType(initiateAddingUserNote),
+      ofType(noteActions.sendUserNoteToBackend),
       tap(() => this.store.dispatch(setAppProcessing({ payload: true }))),
       exhaustMap((action) => {
         const payload = { ...action.payload };
-        return this.http.httpPost('note', 'add', payload).pipe(
-          switchMap((data: any) => {
+        return (<Observable<Note>>(
+          this.http.httpPost('note', 'add', payload)
+        )).pipe(
+          switchMap((data: Note) => {
             //show alert
             return of(
-              finishAddingUserNote({
+              noteActions.mergeUserNote({
                 payload: {
                   noteId: data.noteId,
-                  title: data.title,
-                  description: data.description,
+                  noteTitle: data.noteTitle,
+                  pages: [...data.pages],
                 },
               }),
               showAlert({
@@ -73,7 +69,7 @@ export class NotesEffect {
 
   deleteUserNoteFromDB = createEffect(() =>
     this.actions$.pipe(
-      ofType(initiateRemovingUserNote),
+      ofType(noteActions.initiateRemovingUserNote),
       tap(() => this.store.dispatch(setAppProcessing({ payload: true }))),
       exhaustMap((action) => {
         const payload = { ...action.payload };
@@ -81,7 +77,7 @@ export class NotesEffect {
           switchMap((data: any) => {
             //show alert
             return of(
-              finishRemovingUserNote({ payload: { ...data } }),
+              noteActions.finishRemovingUserNote({ payload: { ...data } }),
               showAlert({
                 payload: {
                   type: 'success',
@@ -109,7 +105,7 @@ export class NotesEffect {
 
   updateUserNoteFromDB = createEffect(() =>
     this.actions$.pipe(
-      ofType(updateUserNote),
+      ofType(noteActions.updateUserNote),
       tap(() => this.store.dispatch(setAppProcessing({ payload: true }))),
       withLatestFrom(this.store.select(userDetails)),
       exhaustMap(([action, user]) => {
@@ -144,7 +140,7 @@ export class NotesEffect {
 
   mergeGuestNotesToDB = createEffect(() =>
     this.actions$.pipe(
-      ofType(mergeGuestNotes),
+      ofType(noteActions.mergeGuestNotes),
       tap(() => this.store.dispatch(setAppProcessing({ payload: true }))),
       withLatestFrom(
         this.store.select(userDetails),
@@ -153,9 +149,7 @@ export class NotesEffect {
       exhaustMap(([action, user, guestNotes]) => {
         const payload = {
           userId: user.userId,
-          notes: guestNotes.map((note) => {
-            return { title: note.title, description: note.description };
-          }),
+          notes: guestNotes,
         };
         return this.http.httpPost('note', 'merge', payload).pipe(
           switchMap((data) => {
@@ -167,7 +161,7 @@ export class NotesEffect {
                   message: 'Temporary notes saved successfully',
                 },
               }),
-              clearGuestNotes()
+              noteActions.clearGuestNotes()
             );
           }),
           catchError((err) => {

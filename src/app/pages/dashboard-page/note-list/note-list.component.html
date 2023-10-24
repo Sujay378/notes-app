@@ -1,1 +1,31 @@
-<p>note-list works!</p>
+<mat-card class="note-list__container">
+  <mat-card-header class="note-list__header">
+    <mat-card-title class="note-list__header-title">
+      Your Notes
+    </mat-card-title>
+    <mat-card-actions class="note-list__header-actions">
+      <button mat-raised-button color="primary" class="add-note-button">
+        <mat-icon fontIcon="add"></mat-icon>Add New
+      </button>
+    </mat-card-actions>
+  </mat-card-header>
+
+  <div class="note-list__notes-view-container">
+    <div class="note-list__notes-scroll-container">
+      <ng-container *ngIf="documentList.length > 0; else elseBlock">
+        <div *ngFor="let doc of documentList" class="note-list__notes-item">
+          <div class="page-layout">
+            <div *ngFor="let item of pageIconLines" class="border-line"></div>
+            <div class="page-title">page-title</div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template class="centered" #elseBlock>
+        <div class="centered">
+          <p>You don't have any notes</p>
+          <p>Feel free to add a new one 😄</p>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</mat-card>
